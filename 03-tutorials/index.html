@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>教程 - Twilio Python快速入门</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "\u6559\u7a0b";
+    var mkdocs_page_input_path = "03-tutorials.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Twilio Python快速入门</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../00/">Python快速入门</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../01-TwiMl/">什么是TwiML？</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../02-webhook/">什么是Webhook？</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">教程</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#_1">教程</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#_2">如何拨打电话</a></li>
+        
+            <li><a class="toctree-l3" href="#_3">处理回应来电</a></li>
+        
+            <li><a class="toctree-l3" href="#_4">创建动态回应来电</a></li>
+        
+            <li><a class="toctree-l3" href="#sms">自定义对传入SMS消息的动态响应</a></li>
+        
+            <li><a class="toctree-l3" href="#dtmf">通过键盘收集用户输入并做某些事（DTMF音）</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Twilio Python快速入门</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>教程</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="_1">教程</h1>
+<p>请务必看pyhton快速入门, 否则你会看不懂</p>
+<h2 id="_2">如何拨打电话</h2>
+<pre><code class="python">account_sid = '***************'
+auth_token = '**************'
+client = Client(account_sid, auth_token)
+
+call = client.calls.create(
+                        url='http://demo.twilio.com/docs/voice.xml',
+                        to='+86***********',
+                        from_='+***********'
+                    )
+
+print(call.sid)
+</code></pre>
+
+<h2 id="_3">处理回应来电</h2>
+<pre><code class="python">from flask import Flask
+from twilio.twiml.voice_response import VoiceResponse
+
+app = Flask(__name__)
+
+
+@app.route(&quot;/voice&quot;, methods=['GET', 'POST'])
+def voice():
+    &quot;&quot;&quot;接听电话带上“你好世界”的信息&quot;&quot;&quot;
+    # 启动我们的TwiML response
+    resp = VoiceResponse()
+
+    # 向打电话的人大声朗读信息
+    resp.say(&quot;hello world!&quot;, voice='alice')
+
+    return str(resp)
+
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+
+<h2 id="_4">创建动态回应来电</h2>
+<pre><code class="python">from flask import Flask, request
+from twilio.twiml.voice_response import VoiceResponse
+
+app = Flask(__name__)
+
+
+@app.route(&quot;/voice&quot;, methods=['GET', 'POST'])
+def voice():
+    &quot;&quot;&quot;接听电话并且提到呼叫者的城市&quot;&quot;&quot;
+    # 从Twilio的请求中获取呼叫者的来电城市到我们的应用程序
+    city = request.values['FromCity']
+
+    # 启动我们的TwiML response
+    resp = VoiceResponse()
+
+    # 向打电话的人大声朗读中文信息并循环5遍
+    resp.say(u'从不放弃你, {}!'.format(city), voice='alice', language='zh-CN', loop='5')
+
+    # 为调用者播放音频文件
+    resp.play('https://demo.twilio.com/docs/classic.mp3')
+
+    return str(resp)
+
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+
+<h2 id="sms">自定义对传入SMS消息的动态响应</h2>
+<pre><code class="python">from flask import Flask, request, redirect
+from twilio.twiml.messaging_response import MessagingResponse
+
+app = Flask(__name__)
+
+@app.route(&quot;/sms&quot;, methods=['GET', 'POST'])
+def incoming_sms():
+    &quot;&quot;&quot;向输入的文本消息发送动态回复&quot;&quot;&quot;
+
+    # 获取呼叫者发送给我们Twilio手机号码的消息
+    body = request.values.get('Body', None)
+
+    # 启动我们TwiML response
+    resp = MessagingResponse()
+
+    # 确定此消息的正确回复
+    if body == 'hello':
+        resp.message(&quot;Hi!&quot;)
+    elif body == 'bye':
+        resp.message(&quot;Goodbye&quot;)
+
+    return str(resp)
+
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+
+<h2 id="dtmf">通过键盘收集用户输入并做某些事（DTMF音）</h2>
+<pre><code class="python">from flask import Flask, request
+from twilio.twiml.voice_response import VoiceResponse, Gather
+
+app = Flask(__name__)
+
+
+@app.route(&quot;/voice&quot;, methods=['GET', 'POST'])
+def voice():
+    &quot;&quot;&quot;用菜单选项来回复来电&quot;&quot;&quot;
+    # 开始我们的TwiML response
+    resp = VoiceResponse()
+
+    # 开始我们的&lt;Gather&gt;动词
+    gather = Gather(num_digits=1, action='/gather', language='cmn-Hans-CN')
+    gather.say(u'销售请按1, 支持请按2.')
+    resp.append(gather)
+
+    # 如果用户没有选择一个选项，那么将它们重定向到一个循环中
+    resp.redirect('/voice')
+
+    return str(resp)
+
+
+@app.route('/gather', methods=['GET', 'POST'])
+def gather():
+    &quot;&quot;&quot;过程的结果来自于&lt;Gather&gt;的/voice提示&quot;&quot;&quot;
+    # 开始我们的TwiML response
+    resp = VoiceResponse()
+
+    # 如果Twilio对我们的应用的请求包括已经收集到的数字
+    # 处理他们
+    if 'Digits' in request.values:
+        # 获取调用者选择的数字
+        choice = request.values['Digits']
+
+        # &lt;Say&gt; 根据调用者的选择不同的消息
+        if choice == '1':
+            resp.say(u'您选择是销售, 祝您好运')
+            return str(resp)
+        elif choice == '2':
+            resp.say(u'您选择的是支持, 我们将会帮助你')
+            return str(resp)
+        else:
+            # 如果打电话的人没有选择1或2，道歉并再次问他们
+            resp.say(u&quot;Sorry, I don't understand that choice.&quot;)
+
+    # 如果用户没有选择1或2（或任何东西），将它们发送回/voice
+    resp.redirect('/voice')
+
+    return str(resp)
+
+if __name__ == &quot;__main__&quot;:
+    app.run(debug=True)
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../02-webhook/" class="btn btn-neutral" title="什么是Webhook？"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../02-webhook/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
