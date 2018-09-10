@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say voice='alice' lanuage='zh-CN'>谢谢你的电话</Say>
+    <Say voice="alice">Thanks for trying our documentation. Enjoy!</Say>
 </Response>
